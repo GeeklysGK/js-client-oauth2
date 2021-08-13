@@ -381,7 +381,8 @@ ClientOAuth2Token.prototype.refresh = function (opts) {
     }),
     body: {
       refresh_token: this.refreshToken,
-      grant_type: 'refresh_token'
+      grant_type: 'refresh_token',
+      client_id: options.clientId
     }
   }, options))
     .then(function (data) {
@@ -638,6 +639,7 @@ CodeFlow.prototype.getToken = function (uri, opts) {
   // Reference: https://tools.ietf.org/html/rfc6749#section-3.2.1
   if (options.clientSecret) {
     headers.Authorization = auth(options.clientId, options.clientSecret)
+    body.client_id = options.clientId
   } else {
     body.client_id = options.clientId
   }
