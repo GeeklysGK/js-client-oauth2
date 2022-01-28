@@ -85,7 +85,7 @@ var ERROR_RESPONSES = {
  * @param  {string} string
  * @return {string}
  */
-function btoaBuffer (string) {
+function btoaBuffer(string) {
   return Buffer.from(string).toString('base64')
 }
 
@@ -97,7 +97,7 @@ function btoaBuffer (string) {
  * @param {Object}    obj
  * @param {...string} props
  */
-function expects (obj) {
+function expects(obj) {
   for (var i = 1; i < arguments.length; i++) {
     var prop = arguments[i]
 
@@ -113,7 +113,7 @@ function expects (obj) {
  * @param  {Object} data
  * @return {string}
  */
-function getAuthError (body) {
+function getAuthError(body) {
   var message = ERROR_RESPONSES[body.error] ||
     body.error_description ||
     body.error
@@ -132,7 +132,7 @@ function getAuthError (body) {
  * @param {string} body
  * @return {Object}
  */
-function parseResponseBody (body) {
+function parseResponseBody(body) {
   try {
     return JSON.parse(body)
   } catch (e) {
@@ -146,7 +146,7 @@ function parseResponseBody (body) {
  * @param  {Array}  scopes
  * @return {string}
  */
-function sanitizeScope (scopes) {
+function sanitizeScope(scopes) {
   return Array.isArray(scopes) ? scopes.join(' ') : toString(scopes)
 }
 
@@ -157,7 +157,7 @@ function sanitizeScope (scopes) {
  * @param  {string} tokenType
  * @return {string}
  */
-function createUri (options, tokenType) {
+function createUri(options, tokenType) {
   // Check the required parameters are set.
   expects(options, 'clientId', 'authorizationUri')
 
@@ -183,7 +183,7 @@ function createUri (options, tokenType) {
  * @param  {string} password
  * @return {string}
  */
-function auth (username, password) {
+function auth(username, password) {
   return 'Basic ' + btoa(toString(username) + ':' + toString(password))
 }
 
@@ -193,14 +193,14 @@ function auth (username, password) {
  * @param  {string} str
  * @return {string}
  */
-function toString (str) {
+function toString(str) {
   return str == null ? '' : String(str)
 }
 
 /**
  * Merge request options from an options object.
  */
-function requestOptions (requestOptions, options) {
+function requestOptions(requestOptions, options) {
   return {
     url: requestOptions.url,
     method: requestOptions.method,
@@ -215,7 +215,7 @@ function requestOptions (requestOptions, options) {
  *
  * @param {Object} options
  */
-function ClientOAuth2 (options, request) {
+function ClientOAuth2(options, request) {
   this.options = options
   this.request = request || defaultRequest
 
@@ -270,6 +270,14 @@ ClientOAuth2.prototype._request = function (options) {
     url += (url.indexOf('?') === -1 ? '?' : '&') + query
   }
 
+  console.log(
+    `#### ClientOAuth2:_request:` +
+    `METHOD ${options.method},` +
+    `URL ${url},` +
+    `BODY ${JSON.stringify(body, null, 2)},` +
+    `HEADERS ${JSON.stringify(options.headers, null, 2)}`
+  );
+
   return this.request(options.method, url, body, options.headers)
     .then(function (res) {
       var body = parseResponseBody(res.body)
@@ -297,7 +305,7 @@ ClientOAuth2.prototype._request = function (options) {
  * @param {Object} client
  * @param {Object} data
  */
-function ClientOAuth2Token (client, data) {
+function ClientOAuth2Token(client, data) {
   this.client = client
   this.data = data
   this.tokenType = data.token_type && data.token_type.toLowerCase()
@@ -406,7 +414,7 @@ ClientOAuth2Token.prototype.expired = function () {
  *
  * @param {ClientOAuth2} client
  */
-function OwnerFlow (client) {
+function OwnerFlow(client) {
   this.client = client
 }
 
@@ -451,7 +459,7 @@ OwnerFlow.prototype.getToken = function (username, password, opts) {
  *
  * @param {ClientOAuth2} client
  */
-function TokenFlow (client) {
+function TokenFlow(client) {
   this.client = client
 }
 
@@ -523,7 +531,7 @@ TokenFlow.prototype.getToken = function (uri, opts) {
  *
  * @param {ClientOAuth2} client
  */
-function CredentialsFlow (client) {
+function CredentialsFlow(client) {
   this.client = client
 }
 
@@ -567,7 +575,7 @@ CredentialsFlow.prototype.getToken = function (opts) {
  *
  * @param {ClientOAuth2} client
  */
-function CodeFlow (client) {
+function CodeFlow(client) {
   this.client = client
 }
 
@@ -662,7 +670,7 @@ CodeFlow.prototype.getToken = function (uri, opts) {
  *
  * @param {ClientOAuth2} client
  */
-function JwtBearerFlow (client) {
+function JwtBearerFlow(client) {
   this.client = client
 }
 
